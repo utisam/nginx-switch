@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>nginx-switch</title>
+    <link rel="stylesheet" href="https://orgplace.tk/_/ui/css/0.1/orgui.css">
+    <style>
+body {
+  width: 100%;
+  display: flex;
+}
+.left {
+  flex-basis: 200px;
+  flex-shrink: 0;
+  padding: 8px;
+}
+.right {
+  flex-grow: 1;
+  padding: 8px;
+  min-width: 320px;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="left">
+      <div class="profilePanel">
+        <h3>Profiles</h3>
+        <div>
+          <div>default</div>
+          <div>full-local</div>
+          <div>full-remote</div>
+        </div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="nginxPanel">
+        <div>
+          <span class="ouiHPack">
+            <button class="ouiButton isPrimary">&#9658; Start</button><button class="ouiButton isHazarding isDisabled">&#9658; Stop</button><button class="ouiButton isSuccess isDisabled">&#9658; Restart</button><button class="ouiButton isWarning isDisabled">&#9658; Reload</button>
+          </span>
+          <label class="ouiInputCheck">
+            <input type="checkbox" class="ouiInputCheck__input">
+            <span class="ouiInputCheck__text">Auto-reload</span>
+          </label>
+        </div>
+        <span>
+          Nginx is stopped
+        </span>
+      </div>
+      <div class="switchBoard">
+        <div>
+          <label class="ouiInputCheck">
+            <input type="checkbox" class="ouiInputCheck__input">
+            <span class="ouiInputCheck__text">Checkbox</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

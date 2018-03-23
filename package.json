@@ -1,0 +1,33 @@
+{
+  "name": "nginx-switch",
+  "version": "1.0.0",
+  "description": "GUI switches for nginx configuration",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "electron": "^1.8.4",
+    "eslint": "^4.19.1",
+    "eslint-config-google": "^0.9.1"
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true,
+      "es6": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "google"
+    ]
+  },
+  "dependencies": {
+    "dockerode": "^2.5.4",
+    "electron-config": "^1.0.0",
+    "electron-log": "^2.2.14"
+  }
+}
