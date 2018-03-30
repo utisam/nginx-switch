@@ -1,11 +1,17 @@
+const fs = require('fs');
+const util = require('util');
+const os = require('os');
+const process = require('process');
 const {app, BrowserWindow, Menu} = require('electron');
 const Config = require('electron-config');
 const log = require('electron-log');
 const path = require('path');
 const url = require('url');
+const rimraf = util.promisify(require('rimraf'));
 
 const {NginxController} = require('./lib/nginx');
 const {Actions} = require('./lib/actions');
+const {Generator} = require('./lib/generator');
 
 const config = new Config();
 
@@ -14,19 +20,7 @@ const config = new Config();
 log.transports.file.level = config.get('log.file.level');
 log.transports.console.level = config.get('log.console.level');
 
-// Nginx
-
-const nginxController = new NginxController(config.get('nginx') || {});
-
-// Actions
-
-const actions = new Actions(nginxController);
-
-// Menu
-
-Menu.setApplicationMenu(actions.getMenu());
-
-// App
+// Window
 
 /** @type {BrowserWindow} */
 let win = null;
@@ -41,6 +35,29 @@ if (app.makeSingleInstance(function() {
   app.quit(1);
   return;
 }
+
+// Nginx
+
+const oldMask = process.umask(0o077);
+const configDirPath = fs.mkdtempSync(path.join(os.tmpdir(), 'nginx-switch-'));
+process.umask(oldMask);
+
+const nginxController = new NginxController(
+  config.get('nginx') || {}, configDirPath);
+
+// Generator
+
+const generator = new Generator(config.get('generator'), configDirPath);
+
+// Actions
+
+const actions = new Actions(nginxController, generator);
+
+// Menu
+
+Menu.setApplicationMenu(actions.getMenu());
+
+// App
 
 app.on('ready', function() {
   win = new BrowserWindow({
@@ -73,7 +90,10 @@ app.on('ready', function() {
   });
 
   win.on('closed', () => {
-    nginxController.clean().then(() => {
+    Promise.all([
+      rimraf(configDirPath),
+      nginxController.clean(),
+    ]).then(() => {
       app.quit();
     });
   });
